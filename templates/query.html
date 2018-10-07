@@ -122,7 +122,39 @@
                <p> </p>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-sm-3">
+                <label> user_count </label>
+            </div>
+            <div class="col-sm-3">
+                <p> {{result.project_user_count}}</p>
+            </div>
+             <div class="col-sm-3">
+               <p> </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <label> man_month </label>
+            </div>
+            <div class="col-sm-3">
+                <p> {{result.project_man_month}}</p>
+            </div>
+             <div class="col-sm-3">
+               <p> {{result.project_man_month_filter}}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <label> committed_code_lines(6 months) </label>
+            </div>
+            <div class="col-sm-3">
+                <p> {{result.project_code_diff}}</p>
+            </div>
+             <div class="col-sm-3">
+               <p> {{result.project_code_diff_filter}}</p>
+            </div>
+        </div>
 
      </div>
     </div>
@@ -218,7 +250,7 @@
                <p>  {{res.subscribers_count_filter}} </p>
             </div>
         </div>
-        
+
 
     </div>
     </div>

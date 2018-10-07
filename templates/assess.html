@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br>
+
+
+
+<div style="width: 980px; margin: 0 auto; overflow: hidden;">
+<div class="grid">
+	<div class="row">
+      <div class="col-sm-20 col-sm-offset-1 wow fadeInUp">
+          <div class="row">
+              <h1><b> Query "{{result.query_term}}" {{result.query_openhub_success}} </b>  </h1>
+          </div>
+      </div>
+	</div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <div class="card text-center">
+	<img class="card-img-top" src="/static/img/maturity.png" alt="Card image cap" width="100%" height="auto">
+      <div class="card-body">
+        <h2 class="card-text"> Score : {{score.maturity_score}} / {{score.total_maturity_score}}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-center">
+	<img class="card-img-top" src="/static/img/license.png" alt="Card image cap" width="100%" height="auto">
+      <div class="card-body">
+        <h2 class="card-text">{{result.project_license}}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="card text-center">
+	<img class="card-img-top" src="/static/img/value.png" alt="Card image cap" width="100%" height="auto">
+      <div class="card-body">
+        <h2 class="card-text"> Score : {{result.project_value_score}} / {{result.total_value_score}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="text-center">
+	<a href="/detail" class="btn btn-primary">View Details</a>
+</div>
+</div>
+
+
+ 
+
+<br>
+
+{% endblock %}
