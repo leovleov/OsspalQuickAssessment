@@ -104,10 +104,16 @@ def queryGithub(searchTerm):
             map["number_of_forks_filter"] = "×"
       if number_of_stars >= 100 and number_of_forks >= 100:
 	      maturity_score = maturity_score + 20
+      else:
+          if number_of_stars != None:
+              maturity_score = maturity_score + number_of_stars/10
+          if number_of_forks != None:
+              maturity_score = maturity_score + number_of_forks/10
+          
 
       map["latest_release_publish_date"] = jsonLatest['published_at']
 
-      map["licesne"] = jsonLicense['license']['name']
+      map["license"] = jsonLicense['license']['name']
 
       map["open_issues_count"] = open_issues_count
       if open_issues_count >= 5:
@@ -115,6 +121,8 @@ def queryGithub(searchTerm):
             maturity_score = maturity_score + 20
       else:
             map["open_issues_count_filter"] = "×"
+            if open_issues_count != None:
+                maturity_score = maturity_score + open_issues_count * 4
 
       map["subscribers_count"] = subscribers_count
       if subscribers_count >= 50:
@@ -210,13 +218,17 @@ def queryOpenHub(queryTerm):
             maturity_score = maturity_score + 20
       else:
             map["project_twelve_month_contributor_count_filter"] = "×"
+            if project_twelve_month_contributor_count != None:
+                maturity_score = maturity_score + project_twelve_month_contributor_count * 10
 
       map["project_total_contributor_count"] = project_total_contributor_count
-      if project_total_contributor_count >= 3:
+      if project_total_contributor_count >= 5:
             map["project_total_contributor_count_filter"] = "√"
             maturity_score = maturity_score + 20
       else:
             map["project_total_contributor_count_filter"] = "×"
+            if project_total_contributor_count != None:
+                maturity_score = maturity_score + project_total_contributor_count*4
 
       map["project_twelve_month_commit_count"] = project_twelve_month_commit_count
       if project_twelve_month_commit_count >= 50:
@@ -241,6 +253,8 @@ def queryOpenHub(queryTerm):
             value_score = value_score + 50
       else:
             map["project_user_count_filter"] = "×"
+            if project_user_count != None:
+                value_score = value_score + project_user_count
 
       def query_man_month():
           man_month, codeDiff = 0, 0
@@ -282,12 +296,16 @@ def queryOpenHub(queryTerm):
             value_score = value_score + 50
       else:
             map["project_man_month_filter"] = "×"
+            if project_man_month != None:
+                value_score = value_score + project_man_month/10
 			
-      if project_code_diff >= 30000 or project_code_diff/float(project_total_code_lines) >= 0.05:
+      if project_code_diff >= 20000 or (project_total_code_lines != None and project_code_diff/float(project_total_code_lines) >= 0.05):
             map["project_code_diff_filter"] = "√"
             maturity_score = maturity_score + 20
       else:
             map["project_code_diff_filter"] = "×"
+            if project_code_diff != None:
+                maturity_score = maturity_score + project_code_diff/1000
 
       map["project_man_month"] = project_man_month # test
       map["project_code_diff"] = project_code_diff # test
@@ -317,18 +335,25 @@ def calculateScores(map_github, map_openhub):
         total_maturity_score = 100;
         maturity_score = maturity_score + map_openhub["project_maturity_score"];
         maturity_score = maturity_score + map_github["project_maturity_score"];
-    
+        query_result = "succeeded";
+        license = map_openhub["project_license"];    
     elif map_openhub["query_openhub_success"] == "succeeded":
         total_maturity_score = 60;
         maturity_score = maturity_score + map_openhub["project_maturity_score"];
-    
-    else:
+        query_result = "partially succeeded";
+        license = map_openhub["project_license"];
+    elif map_github["query_github_success"] == "succeeded":
         total_maturity_score = 40;
         maturity_score = maturity_score + map_github["project_maturity_score"];
-    
+        query_result = "partially succeeded";
+        license = map_github["license"];
+    else:
+        query_result = "Failed";
     map = {}
     map["total_maturity_score"] = total_maturity_score;
     map["maturity_score"] = maturity_score;
+    map["query_result"] = query_result;
+    map["license"] = license;
     return map;
 
 if __name__ == "__main__":

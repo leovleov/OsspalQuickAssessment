@@ -11,7 +11,7 @@
 	<div class="row">
       <div class="col-sm-20 col-sm-offset-1 wow fadeInUp">
           <div class="row">
-              <h1><b> Query "{{result.query_term}}" {{result.query_openhub_success}} </b>  </h1>
+              <h1><b> Query "{{result.query_term}}" {{score.query_result}} </b>  </h1>
           </div>
       </div>
 	</div>
@@ -29,7 +29,7 @@
     <div class="card text-center">
 	<img class="card-img-top" src="/static/img/license.png" alt="Card image cap" width="100%" height="auto">
       <div class="card-body">
-        <h2 class="card-text">{{result.project_license}}</h2>
+        <h2 class="card-text">{{score.license}}</h2>
       </div>
     </div>
   </div>
