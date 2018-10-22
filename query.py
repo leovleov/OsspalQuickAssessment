@@ -137,6 +137,37 @@ def queryGithub(searchTerm):
 
 
 def queryOpenHub(queryTerm):
+    def query_man_month():
+        man_month, codeDiff = 0, 0
+        size_facts_query_url = "https://www.openhub.net/projects/" + str(project_id) + "/analyses/latest/size_facts" + ".xml?api_key=" + api_key
+        print size_facts_query_url
+        dom = minidom.parse(urllib2.urlopen(size_facts_query_url)) # parse the data
+
+        sizeFact = dom.getElementsByTagName('size_fact')
+        node = sizeFact[-1] # the latest 1 month
+        node2 = sizeFact[-6] # the latest 6 month
+
+        manMonthList = node.getElementsByTagName('man_months')
+        m = manMonthList[-1]
+
+        total = m.childNodes[0].nodeValue
+        man_month = int(total)
+
+        codeLineList = node.getElementsByTagName('code')
+        if not codeLineList:
+            codeDiff = 0
+        else:
+            c = codeLineList[-1]
+            code0 = c.childNodes[0].nodeValue
+
+            codeLineList = node2.getElementsByTagName('code')
+            c = codeLineList[-1]
+            code2 = c.childNodes[0].nodeValue
+
+            codeDiff = int(code0) - int(code2)
+
+        return man_month, codeDiff
+        
     map={}
     map["query_term"] = queryTerm
     api_key = "85690631252ec7681f0e7ac7f46725c4fcc8b56cd2f6c38cb4a7cf7961512f98"
@@ -166,12 +197,11 @@ def queryOpenHub(queryTerm):
     if map["query_openhub_success"] == "succeeded":
         project_query_url = "https://www.openhub.net/projects/" + str(project_id) + ".xml?api_key=" + api_key
         print project_query_url
+        openhub_resp_content = requests.get(project_query_url,verify=False).content
 
-    openhub_resp_content = requests.get(project_query_url,verify=False).content
+        # handle exception
 
-      # handle exception
-
-    openhub_soup = BeautifulSoup(openhub_resp_content, "html.parser")
+        openhub_soup = BeautifulSoup(openhub_resp_content, "html.parser")
     try:
         project_twelve_month_contributor_count = int(openhub_soup.find('twelve_month_contributor_count').get_text())
     except:
@@ -256,36 +286,7 @@ def queryOpenHub(queryTerm):
         if project_user_count != None:
             value_score = value_score + project_user_count
 
-    def query_man_month():
-        man_month, codeDiff = 0, 0
-        size_facts_query_url = "https://www.openhub.net/projects/" + str(project_id) + "/analyses/latest/size_facts" + ".xml?api_key=" + api_key
-        print size_facts_query_url
-        dom = minidom.parse(urllib2.urlopen(size_facts_query_url)) # parse the data
-
-        sizeFact = dom.getElementsByTagName('size_fact')
-        node = sizeFact[-1] # the latest 1 month
-        node2 = sizeFact[-6] # the latest 6 month
-
-        manMonthList = node.getElementsByTagName('man_months')
-        m = manMonthList[-1]
-
-        total = m.childNodes[0].nodeValue
-        man_month = int(total)
-
-        codeLineList = node.getElementsByTagName('code')
-        if not codeLineList:
-            codeDiff = 0
-        else:
-            c = codeLineList[-1]
-            code0 = c.childNodes[0].nodeValue
-
-            codeLineList = node2.getElementsByTagName('code')
-            c = codeLineList[-1]
-            code2 = c.childNodes[0].nodeValue
-
-            codeDiff = int(code0) - int(code2)
-
-        return man_month, codeDiff
+    
     try:
         project_man_month, project_code_diff = query_man_month()
     except:
