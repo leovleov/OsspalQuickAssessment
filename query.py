@@ -105,9 +105,13 @@ def queryGithub(searchTerm):
     if number_of_stars >= 100 and number_of_forks >= 100:
         maturity_score = maturity_score + 20
     else:
-        if number_of_stars != None:
+        if number_of_stars >= 100:
+            maturity_score = maturity_score + 10
+        elif number_of_stars != None:
             maturity_score = maturity_score + number_of_stars/10
-        if number_of_forks != None:
+        if number_of_forks >= 100:
+            maturity_score = maturity_score + 10
+        elif number_of_forks != None:
             maturity_score = maturity_score + number_of_forks/10
           
 
@@ -116,13 +120,13 @@ def queryGithub(searchTerm):
     map["license"] = jsonLicense['license']['name']
 
     map["open_issues_count"] = open_issues_count
-    if open_issues_count >= 5:
+    if open_issues_count >= 50:
         map["open_issues_count_filter"] = "√"
         maturity_score = maturity_score + 20
     else:
         map["open_issues_count_filter"] = "×"
         if open_issues_count != None:
-            maturity_score = maturity_score + open_issues_count * 4
+            maturity_score = maturity_score + open_issues_count*2/5
 
     map["subscribers_count"] = subscribers_count
     if subscribers_count >= 50:
@@ -140,32 +144,27 @@ def queryOpenHub(queryTerm):
     def query_man_month():
         man_month, codeDiff = 0, 0
         size_facts_query_url = "https://www.openhub.net/projects/" + str(project_id) + "/analyses/latest/size_facts" + ".xml?api_key=" + api_key
-        print size_facts_query_url
+        #print size_facts_query_url
         dom = minidom.parse(urllib2.urlopen(size_facts_query_url)) # parse the data
 
         sizeFact = dom.getElementsByTagName('size_fact')
-        node = sizeFact[-1] # the latest 1 month
-        node2 = sizeFact[-6] # the latest 6 month
-
-        manMonthList = node.getElementsByTagName('man_months')
+        manMonthList = sizeFact[-1].getElementsByTagName('man_months')
         m = manMonthList[-1]
-
         total = m.childNodes[0].nodeValue
         man_month = int(total)
 
-        codeLineList = node.getElementsByTagName('code')
-        if not codeLineList:
+        if not sizeFact[-1].getElementsByTagName('code'):
             codeDiff = 0
         else:
-            c = codeLineList[-1]
-            code0 = c.childNodes[0].nodeValue
-
-            codeLineList = node2.getElementsByTagName('code')
-            c = codeLineList[-1]
-            code2 = c.childNodes[0].nodeValue
-
-            codeDiff = int(code0) - int(code2)
-
+            codeCurr, codePrev = 0, 0
+            monthDiff = 6 # the latest 6 month
+            for ind in range(1, monthDiff + 1): # 1, 7
+                node = sizeFact[-ind]
+                codeLineList = node.getElementsByTagName('code')
+                codeCurr = codeLineList[-1].childNodes[0].nodeValue
+                if ind != 1:
+                    codeDiff += abs( int(codeCurr) - int(codePrev) )
+                codePrev = codeCurr
         return man_month, codeDiff
         
     map={}
