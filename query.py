@@ -98,21 +98,29 @@ def queryGithub(searchTerm):
         map["number_of_stars_filter"] = "×"
 
     map["number_of_forks"] = number_of_forks
+    map["total_score_stars"] = 10
+    map["total_score_forks"] = 10;
+    score_stars = 0;
+    score_forks = 0;
     if number_of_forks >= 100:
         map["number_of_forks_filter"] = "√"
     else:
         map["number_of_forks_filter"] = "×"
     if number_of_stars >= 100 and number_of_forks >= 100:
-        maturity_score = maturity_score + 20
-    else:
+        score_stars = 10
+        score_forks = 10
+    else:        
         if number_of_stars >= 100:
-            maturity_score = maturity_score + 10
+            score_stars = 10        
         elif number_of_stars != None:
-            maturity_score = maturity_score + number_of_stars/10
+            score_stars = number_of_stars/10
         if number_of_forks >= 100:
-            maturity_score = maturity_score + 10
+            score_forks = 10
         elif number_of_forks != None:
-            maturity_score = maturity_score + number_of_forks/10
+            score_forks = number_of_forks/10
+    maturity_score = maturity_score + score_stars + score_forks
+    map["score_stars"] = score_stars
+    map["score_forks"] = score_forks
           
 
     map["latest_release_publish_date"] = jsonLatest['published_at']
@@ -120,13 +128,17 @@ def queryGithub(searchTerm):
     map["license"] = jsonLicense['license']['name']
 
     map["open_issues_count"] = open_issues_count
+    map["total_score_open_issues"] = 20
+    score_open_issues = 0
     if open_issues_count >= 50:
         map["open_issues_count_filter"] = "√"
-        maturity_score = maturity_score + 20
+        score_open_issues = 20
     else:
         map["open_issues_count_filter"] = "×"
         if open_issues_count != None:
-            maturity_score = maturity_score + open_issues_count*2/5
+            score_open_issues = open_issues_count*2/5
+    maturity_score = maturity_score + score_open_issues
+    map["score_open_issues"] = score_open_issues
 
     map["subscribers_count"] = subscribers_count
     if subscribers_count >= 50:
@@ -242,22 +254,30 @@ def queryOpenHub(queryTerm):
 
     map["project_html_url"] = project_html_url
     map["project_twelve_month_contributor_count"] = project_twelve_month_contributor_count
+    map["total_score_twelve_month_contributor"] = 20
+    score_twelve_month_contributor = 0
     if project_twelve_month_contributor_count >= 2:
         map["project_twelve_month_contributor_count_filter"] = "√"
-        maturity_score = maturity_score + 20
+        score_twelve_month_contributor = 20
     else:
         map["project_twelve_month_contributor_count_filter"] = "×"
         if project_twelve_month_contributor_count != None:
-            maturity_score = maturity_score + project_twelve_month_contributor_count * 10
+            score_twelve_month_contributor = project_twelve_month_contributor_count * 10
+    maturity_score = maturity_score + score_twelve_month_contributor
+    map["score_twelve_month_contributor"] = score_twelve_month_contributor
 
     map["project_total_contributor_count"] = project_total_contributor_count
+    map["total_score_total_contributor"] = 20
+    score_total_contributor = 0
     if project_total_contributor_count >= 5:
         map["project_total_contributor_count_filter"] = "√"
-        maturity_score = maturity_score + 20
+        score_total_contributor = 20        
     else:
         map["project_total_contributor_count_filter"] = "×"
         if project_total_contributor_count != None:
-            maturity_score = maturity_score + project_total_contributor_count*4
+            score_total_contributor = project_total_contributor_count*4
+    maturity_score = maturity_score + score_total_contributor
+    map["score_total_contributor"] = score_total_contributor;
 
     map["project_twelve_month_commit_count"] = project_twelve_month_commit_count
     if project_twelve_month_commit_count >= 50:
@@ -276,36 +296,46 @@ def queryOpenHub(queryTerm):
     map["project_license"] = project_license
     map["project_project_activity_index_description"] = project_project_activity_index_description
     map["project_user_count"] = project_user_count
-      
+     
+    map["total_score_user_count"] = 50
+    score_user_count = 0
     if project_user_count >= 50:
-        map["project_user_count_filter"] = "√"
-        value_score = value_score + 50
+        score_user_count = 50
     else:
         map["project_user_count_filter"] = "×"
         if project_user_count != None:
-            value_score = value_score + project_user_count
-
+            score_user_count = project_user_count
+    map["score_user_count"] = score_user_count
+    value_score = value_score + score_user_count
     
     try:
         project_man_month, project_code_diff = query_man_month()
     except:
         project_man_month, project_code_diff = None, None
-            
+    
+    map["total_score_man_month"] = 50
+    score_man_month = 0
     if project_man_month >= 500:
         map["project_man_month_filter"] = "√"
-        value_score = value_score + 50
+        score_man_month = 50
     else:
         map["project_man_month_filter"] = "×"
         if project_man_month != None:
-            value_score = value_score + project_man_month/10
-            
+            score_man_month = project_man_month/10
+    value_score = value_score + score_man_month
+    map["score_man_month"] = score_man_month
+    
+    map["total_score_code_diff"] = 20
+    score_code_diff = 0
     if project_code_diff >= 20000 or (project_total_code_lines != None and project_code_diff/float(project_total_code_lines) >= 0.05):
         map["project_code_diff_filter"] = "√"
-        maturity_score = maturity_score + 20
+        score_code_diff = 20
     else:
         map["project_code_diff_filter"] = "×"
         if project_code_diff != None:
-            maturity_score = maturity_score + project_code_diff/1000
+            score_code_diff = project_code_diff/1000
+    map["score_code_diff"] = score_code_diff
+    maturity_score = maturity_score + score_code_diff
 
     map["project_man_month"] = project_man_month # test
     map["project_code_diff"] = project_code_diff # test

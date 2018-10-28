@@ -53,4 +53,121 @@
 
 <br>
 
+    <br>
+
+     <div class="container">
+        <div class="row">
+          <div class="col-sm-12 ">
+         
+             <p class="text-muted">   The most updated hard <b> criteria </b>  we used to screen FOSS projects for inclusion on OSSpal are listed below. Please note that the hard criteria will also be updated on a regular basis. </p>
+
+             <div class="row">
+                 <div class="col-sm-6 col-sm-offset-1">
+                     <p class="text-muted" text-align="center">  Open Hub Metrics contribute to Maturity Score (as of October 2018): </p>
+				 </div>				 
+				 <div class="text-muted col-sm-9 col-sm-offset-2 c-form-box wow fadeInUp">
+					<div class="row">
+						<div class="col-sm-7">
+							Number of 12 Month Contributors ≥ 2
+						</div>
+						<div class="col-sm-2">
+							{{result.score_twelve_month_contributor}}/{{result.total_score_twelve_month_contributor}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Total Contributors ≥ 5
+						</div>
+						<div class="col-sm-2">
+							{{result.score_total_contributor}}/{{result.total_score_total_contributor}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Lines of Code Changed in 6 Months ≥ 20000 or ≥ 5%
+						</div>
+						<div class="col-sm-2">
+							{{result.score_code_diff}}/{{result.total_score_code_diff}}
+						</div>
+					</div>
+				 </div>
+				 <div class="col-sm-6 col-sm-offset-1">
+                     <p class="text-muted" text-align="center">     GitHub Metrics contribute to Maturity Score (as of October 2018): </p>
+				 </div>
+				 <div class="text-muted col-sm-9 col-sm-offset-2 c-form-box wow fadeInUp">
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Starts ≥ 100
+						</div>
+						<div class="col-sm-2">
+							{{res.score_stars}}/{{res.total_score_stars}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Forks ≥ 100
+						</div>
+						<div class="col-sm-2">
+							{{res.score_forks}}/{{res.total_score_forks}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Open Issues ≥ 50
+						</div>
+						<div class="col-sm-2">
+							{{res.score_open_issues}}/{{res.total_score_open_issues}}
+						</div>
+					</div>
+				 </div>
+				 
+				 <div class="col-sm-6 col-sm-offset-1">
+					 <p class="text-muted" text-align="center">  Open Hub Metrics contribute to Value Score (as of October 2018):</p>
+				 </div>
+				 <div class="text-muted col-sm-9 col-sm-offset-2 c-form-box wow fadeInUp">
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Users ≥ 50
+						</div>
+						<div class="col-sm-2">
+							{{result.score_user_count}}/{{result.total_score_user_count}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Man Month work ≥ 500
+						</div>
+						<div class="col-sm-2">
+							{{result.score_man_month}}/{{result.total_score_man_month}}
+						</div>
+					</div>
+				 </div>
+				 
+				 <div class="col-sm-6 col-sm-offset-1">
+					 <p class="text-muted" text-align="center">  Other Matrics (as of October 2018):</p>
+				 </div>
+				 <div class="text-muted col-sm-9 col-sm-offset-2 c-form-box wow fadeInUp">
+					<div class="row">
+						<div class="col-sm-7">
+							Number of 6 Month Commits ≥ 50
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Total Commits ≥ 1000
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-7">
+							Number of Subscribers ≥ 50
+						</div>
+					</div>
+				 </div>
+             </div>
+			 
+			 <p class="text-muted"> Information from OpenHub and GitHub may not be accurate. Please use as appropriate. </p>
+          
+          </div>
+        </div>
+    </div>
 {% endblock %}
