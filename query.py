@@ -156,7 +156,7 @@ def queryOpenHub(queryTerm):
     def query_man_month():
         man_month, codeDiff = 0, 0
         size_facts_query_url = "https://www.openhub.net/projects/" + str(project_id) + "/analyses/latest/size_facts" + ".xml?api_key=" + api_key
-        #print size_facts_query_url
+        print size_facts_query_url
         dom = minidom.parse(urllib2.urlopen(size_facts_query_url)) # parse the data
 
         sizeFact = dom.getElementsByTagName('size_fact')
@@ -327,13 +327,14 @@ def queryOpenHub(queryTerm):
     
     map["total_score_code_diff"] = 20
     score_code_diff = 0
-    if project_code_diff >= 20000 or (project_total_code_lines != None and project_code_diff/float(project_total_code_lines) >= 0.05):
+    if project_code_diff >= 10000 or (project_total_code_lines != None and project_code_diff/float(project_total_code_lines) >= 0.05):
         map["project_code_diff_filter"] = "√"
         score_code_diff = 20
     else:
         map["project_code_diff_filter"] = "×"
         if project_code_diff != None:
-            score_code_diff = project_code_diff/1000
+            #score_code_diff = project_code_diff/500
+            score_code_diff = max(project_code_diff/500, int(project_code_diff/float(project_total_code_lines)*20*20+0.5))
     map["score_code_diff"] = score_code_diff
     maturity_score = maturity_score + score_code_diff
 
